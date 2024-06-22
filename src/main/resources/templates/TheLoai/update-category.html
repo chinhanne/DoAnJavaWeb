@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Update Category</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+<section layout:fragment="content" class="container mt-5">
+    <h1 class="mb-4">Update Category</h1>
+    <form th:action="@{/TheLoai/update/{id}(id=${theloai.id})}"
+          th:object="${theloai}" method="post" enctype="multipart/form-data" class=" needs-validation" novalidate >
+        <div class="mb-3">
+            <label for="TenTheLoai" class="form-label">Category Name:</label>
+            <input type="text" th:field="*{TenTheLoai}" class="form-control" id="TenTheLoai"
+                   required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('TenTheLoai')}"
+                 th:errors="*{TenTheLoai}">Valid name is required.</div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a th:href="@{/TheLoai}" class="btn btn-link">Cancel</a>
+    </form>
+</section>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+</script>
+</body>
+</html>
