@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security5"
       layout:decorate="~{layout}">
 <head>
     <title th:text="${title} ?: 'Products List'">Products List</title>
@@ -40,19 +41,26 @@
                 <img th:src="${sanpham.images}" alt="Product Image" style="max-width: 100px; max-height: 100px;"/>
             </td>
             <td>
+
+                <div sec:authorize="hasAuthority('ADMIN')">
                     <a th:href="@{/sanpham/edit/{id}(id=${sanpham.id})}"
                        class="btn btn-success btn-sm">Sửa</a>
                     <a th:href="@{/sanpham/delete/{id}(id=${sanpham.id})}"
                        class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc không?')">Xóa</a>
+                </div>
             </td>
-<!--            <td>-->
-<!--                    <input type="number" name="quantity" min="1" th:max="${product.Sl}" value="1"-->
-<!--                           class="form-control d-inline-block" style="width: 70px;">-->
-<!--                    <input type="hidden" th:value="${product.id}"-->
-<!--                           name="productId"/>-->
-<!--                    <button type="submit" class="btn btn-warning btn-sm">Thêm Vào-->
-<!--                        Giỏ</button>-->
-<!--            </td>-->
+            <td>
+                <!-- Nút thêm vào giỏ hàng, hiển thị cho tất cả người dùng đã xác
+                thực -->
+                <form th:action="@{/cart/add}" method="post"
+                      sec:authorize="isAuthenticated()">
+                    <input type="number" name="quantity" min="1" value="1"90
+                           class="form-control d-inline-block" style="width: 70px;">
+                    <input type="hidden" th:value="${sanpham.id}"
+                           name="productId"/>
+                    <button type="submit" class="btn btn-warning btn-sm">Thêm Vào Giỏ</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
