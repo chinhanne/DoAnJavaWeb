@@ -92,4 +92,12 @@ public class SanPhamController {
         sanPhamService.deleteSanphamById(id);
         return "redirect:/sanpham";
     }
+
+    @GetMapping("/detail/{id}")
+    public String viewSanphamDetail(@PathVariable Long id, Model model) {
+        SamPham samPham = sanPhamService.getSanphamById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
+        model.addAttribute("sanpham", samPham);
+        return "/sanpham/detail-product";
+    }
 }
