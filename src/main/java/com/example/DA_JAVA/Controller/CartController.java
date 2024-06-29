@@ -28,6 +28,7 @@ public class CartController {
         return "redirect:/cart";
     }
 
+
     @GetMapping("/clear")
     public String clearCart(){
         cartService.clearCart();

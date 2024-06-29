@@ -28,7 +28,7 @@
                 <input type="hidden" th:value="${item.sanpham.id}" name ="sanphamId" >
             </td>
             <td>
-                <input type="text" th:value="${item.sanpham.Gia}" class="form-control d-inline-block" style="width: 40%;" disabled>
+                <input type="text" th:value="${item.sanpham.Gia*item.quantity}" class="form-control d-inline-block" style="width: 40%;" disabled>
             </td>
             <td>
                 <a th:href="@{/cart/remove/{sanphamId}(sanphamId=${item.sanpham.id})}" class="btn btndanger btn-sm">Xóa</a>

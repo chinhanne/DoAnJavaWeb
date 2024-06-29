@@ -36,6 +36,7 @@ public class CartService {
             cartItems.add(new CartItem(sanpham, quantity));
         }
     }
+
     public List<CartItem> getCartItems() {
         return cartItems;
     }

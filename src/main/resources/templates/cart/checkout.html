@@ -1,34 +1,69 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
     <title th:text="${title} ?: 'Your Cart'">Place Order</title>
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        /* Chỉnh giao diện tại đây */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 80px;
+            font-size: 2.5rem;
+            color: #007bff; /* Màu chữ xanh dương */
+        }
+        .form-label {
+            font-weight: bold;
+            color: #007bff; /* Màu chữ cho nhãn form */
+        }
+        .form-control {
+            border-radius: 5px;
+            border-color: #007bff; /* Màu viền input */
+        }
+        .btn-primary {
+            background-color: #007bff; /* Màu nền nút */
+            border-color: #007bff; /* Màu viền nút */
+            border-radius: 5px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; /* Màu nền nút khi di chuột qua */
+            border-color: #0056b3; /* Màu viền nút khi di chuột qua */
+        }
+    </style>
 </head>
 <body>
-<section layout:fragment="content">
-    <h1 style="margin-top:80px;">Place Your Order</h1>
-    <form th:action="@{/order/submit}" method="post">
-        <div class="mb-3">
-            <label for="customerName" class="form-label">Your Name:</label>
-            <input type="text" id="customerName" name="customerName" class="formcontrol" required>
+<section layout:fragment="content" class="container">
+    <h1>Place Your Order</h1>
+    <div class="row">
+        <!-- Billing Details Section -->
+        <div class="col-md-6">
+            <h2>Billing Details</h2>
+            <form th:action="@{/order/submit}" method="post">
+                <div class="mb-3">
+                    <label for="customerName" class="form-label">Customer Name:</label>
+                    <input type="text" id="customerName" name="customerName" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="number" class="form-label">Phone Number:</label>
+                    <input type="text" id="number" name="number" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address:</label>
+                    <input type="text" id="address" name="address" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Order Note:</label>
+                    <textarea id="description" name="description" class="form-control"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit Order</button>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="address" class="form-label">Dia Chi:</label>
-            <input type="text" id="address" name="address" class="formcontrol" required>
-        </div>
-        <div class="mb-3">
-            <label for="number" class="form-label">SDT:</label>
-            <input type="text" id="number" name="number" class="formcontrol" required>
-        </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Ghi Chu:</label>
-            <input type="text" id="description" name="description" class="formcontrol" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit Order</button>
-    </form>
+</div>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
