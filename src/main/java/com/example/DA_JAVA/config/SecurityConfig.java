@@ -12,12 +12,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration // Đánh dấu lớp này là một lớp cấu hình cho Spring Context.
 @EnableWebSecurity // Kích hoạt tính năng bảo mật web của Spring Security.
 @RequiredArgsConstructor // Lombok tự động tạo constructor có tham số cho tất cả các trường final.
 public class SecurityConfig {
     private final UserService userService; // Tiêm UserService vào lớp cấu hình này.
+    private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+
     @Bean // Đánh dấu phương thức trả về một bean được quản lý bởi Spring Context.
     public UserDetailsService userDetailsService() {
         return new UserService(); // Cung cấp dịch vụ xử lý chi tiết người dùng.
@@ -33,6 +37,9 @@ public class SecurityConfig {
         auth.setPasswordEncoder(passwordEncoder()); // Thiết lập cơ chế mã hóa mật khẩu.
         return auth; // Trả về nhà cung cấp xác thực.
     }
+
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(@NotNull HttpSecurity http) throws Exception {
         return http
@@ -56,7 +63,8 @@ public class SecurityConfig {
                 formLogin(formLogin -> formLogin
                         .loginPage("/login") // Trang đăng nhập.
                         .loginProcessingUrl("/login") // URL xử lý đăng nhập.
-                        .defaultSuccessUrl("/sanpham") // Trang sau đăng nhập thành công.
+//                        .defaultSuccessUrl("/sanpham") // Trang sau đăng nhập thành công.
+                        .successHandler(customAuthenticationSuccessHandler)
                         .failureUrl("/login?error") // Trang đăng nhập thất bại.
                         .permitAll()
                 ) .
