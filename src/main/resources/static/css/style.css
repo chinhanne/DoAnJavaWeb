@@ -161,8 +161,11 @@ button:focus{
 	z-index: 10;
 }
 
+.navbar-brand img {
+    width: 48px;
+}
+
 .top-navbar .navbar{
-	padding: 15px 0px;
 	position: fixed;
 	width: 100%;
 	border-radius: 0px 0px 100px 100px;

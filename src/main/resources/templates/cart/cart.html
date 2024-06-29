@@ -8,34 +8,35 @@
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-<section layout:fragment="content" class="container mt-3">
-    <h1>Your Cart</h1>
-    <div th:if="${cartItems.isEmpty()}" class="alert alert-info">Your cart is
-        empty.</div>
-    <table class="table" th:unless="${cartItems.isEmpty()}">
+<section layout:fragment="content">
+    <h1 style="margin: 80px 0;">Giỏ Hàng</h1>
+    <div th:if="${cartItems.isEmpty()}" class="alert alert-info">Giỏ Hàng Trống.</div>
+    <table class="table" th:unless="${cartItems.isEmpty()}" style="margin-bottom: 80px;">
         <thead class="table-light">
         <tr>
-            <th>Product Name</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Action</th>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Giá</th>
+            <th>Thao tác</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="item : ${cartItems}">
             <td th:text="${item.sanpham.Ten}"></td>
             <td>
-                <input type="number" th:value="${item.quantity}" min="1"
-                       class="form-control d-inline-block" style="width: 70px;">
-                <input type="hidden" th:value="${item.sanpham.id}" name ="sanphamId">
+                <input type="number" th:value="${item.quantity}" min="1" class="form-control d-inline-block" style="width: 70px;" disabled>
+                <input type="hidden" th:value="${item.sanpham.id}" name ="sanphamId" >
             </td>
-            <input type="text" th:value="${item.sanpham.Gia}" disabled>
+            <td>
+                <input type="text" th:value="${item.sanpham.Gia}" class="form-control d-inline-block" style="width: 40%;" disabled>
             </td>
-            <td><a th:href="@{/cart/remove/{sanphamId}(sanphamId=${item.sanpham.id})}" class="btn btndanger btn-sm">Remove</a>
+            <td>
+                <a th:href="@{/cart/remove/{sanphamId}(sanphamId=${item.sanpham.id})}" class="btn btndanger btn-sm">Xóa</a>
             </td>
         </tr>
         </tbody>
     </table>
+    <a th:href="@{/order/checkout}" class="btn btn-success" th:if="${!cartItems.isEmpty()}" style="font-size: 12px;margin: 12px 6px;border: 1px solid #333;">Checkout</a>
 </section>
 </body>
 </html>
