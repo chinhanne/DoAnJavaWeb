@@ -1,16 +1,15 @@
 package com.example.DA_JAVA.model;
 
+
+
 public class CartItem {
+
     private SamPham sanpham;
     private int quantity;
 
-    public CartItem(SamPham sanpham, int quantity) {
-        this.sanpham = sanpham;
-        this.quantity = quantity;
-    }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public SamPham getSanpham() {
+        return sanpham;
     }
 
     public void setSanpham(SamPham sanpham) {
@@ -18,6 +17,11 @@ public class CartItem {
     }
 
     public CartItem() {
+    }
+
+    public CartItem(SamPham sanpham, int quantity) {
+        this.sanpham = sanpham;
+        this.quantity = quantity;
     }
 
     @Override
@@ -32,8 +36,13 @@ public class CartItem {
         return quantity;
     }
 
-    public SamPham getSanpham() {
-        return sanpham;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
-// Constructors
+
+    public double getAmount(){
+        return quantity * sanpham.getGia();
+    }
+
+
 }
