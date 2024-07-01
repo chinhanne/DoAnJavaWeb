@@ -27,14 +27,18 @@ public class OrderController {
     @Autowired
     private CartService cartService;
     @GetMapping("/checkout")
-    public String checkout() {
+    public String checkout(Model model) {
+        List<CartItem> cartItems = cartService.getCartItems();
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("subTotal", cartService.getSubtotal());
         return "/cart/checkout";
     }
     @PostMapping("/submit")
     public String submitOrder(@Valid Order order) {
         List<CartItem> cartItems = cartService.getCartItems();
+
         if (cartItems.isEmpty()) {
-            return "redirect:/cart"; // Redirect if cart is empty
+            return "redirect:/cart";
         }
         orderService.createOrder(order, cartItems);
         return "redirect:/order/confirmation";
@@ -44,5 +48,6 @@ public class OrderController {
         model.addAttribute("message", "Your order has been successfully placed.");
         return "/cart/order-confirmation";
     }
+
 }
 

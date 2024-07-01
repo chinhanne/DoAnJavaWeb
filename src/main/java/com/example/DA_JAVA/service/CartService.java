@@ -9,42 +9,49 @@ import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @SessionScope
 public class CartService {
     private List<CartItem> cartItems = new ArrayList<>();
+
     @Autowired
-    private SanPhamRepository sanphamRepository;
-//    public void addToCart(Long sanphamId, int quantity) {
-//        SamPham sanpham = sanphamRepository.findById(sanphamId).orElseThrow(() -> new IllegalArgumentException("Product not found: " + sanphamId));
-//        cartItems.add(new CartItem(sanpham, quantity));
-//    }
+    private SanPhamRepository sanPhamRepository;
 
-    public void addToCart(Long sanphamId, int quantity) {
-        SamPham sanpham = sanphamRepository.findById(sanphamId).orElseThrow(() -> new IllegalArgumentException("Product not found: " + sanphamId));
+    public void upsertCart(Long sanphamId, int quantity) {
+        SamPham sanPham = sanPhamRepository.findById(sanphamId)
+                .orElseThrow(() -> new IllegalArgumentException("San Pham not found: " + sanphamId));
+        if (cartItems.stream().filter(p -> p.getSanpham().getId() == sanphamId && p.getQuantity() > 0).count() > 0) {
+            CartItem item = cartItems.stream().filter(p -> p.getSanpham().getId() == sanphamId).findFirst().get();
+            item.setQuantity(item.getQuantity() + quantity);
+        } else
+            cartItems.add(new CartItem(sanPham, quantity));
 
-        Optional<CartItem> existingCartItem = cartItems.stream()
-                .filter(item -> item.getSanpham().getId().equals(sanphamId))
-                .findFirst();
+    }
 
-        if (existingCartItem.isPresent()) {
-            CartItem cartItem = existingCartItem.get();
-            cartItem.setQuantity(cartItem.getQuantity() + quantity);
-        } else {
-            cartItems.add(new CartItem(sanpham, quantity));
+    public void updateCart(Long id, int quantity){
+        SamPham sanPham = sanPhamRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("San Pham not found: "+id));
+        if(cartItems.stream().filter(p->p.getSanpham().getId().equals(id)&&p.getQuantity()>0).count()>0){
+            CartItem item = cartItems.stream().filter(p->p.getSanpham().getId()==id).findFirst().get();
+            item.setQuantity(quantity);
         }
     }
 
-    public List<CartItem> getCartItems() {
-        return cartItems;
+
+    public List<CartItem> getCartItems(){return cartItems;}
+
+    public void removeFormCart(Long sanphamId){
+        cartItems.removeIf(i->i.getSanpham().getId().equals(sanphamId));
     }
-    public void removeFromCart(Long sanphamId) {
-        cartItems.removeIf(item -> item.getSanpham().getId().equals(sanphamId));
-    }
-    public void clearCart() {
+
+
+    public void clearCart(){
         cartItems.clear();
+    }
+
+    public double getSubtotal(){
+        return cartItems.stream().filter(p->p.getAmount()>0).mapToDouble(p->p.getAmount()).sum();
     }
 
 }
