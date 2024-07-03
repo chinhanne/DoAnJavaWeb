@@ -14,46 +14,49 @@
     <h1 style="margin: 80px 0;">Giỏ Hàng</h1>
     <div th:if="${cartItems.isEmpty()}" class="alert alert-info">Giỏ Hàng Trống.</div>
     <script>
-        function DoSubmit(){
-            const value = document.getElementById("quantity").value;
-            if(value==null||value==""||value<=0)
-                document.getElementById("quantity").value = 1;
-            document.getElementById("updateCartForm").submit();
+        function DoSubmit(sanphamId){
+            const value = document.getElementById(sanphamId).value;
+            if(value===null||value===""||value<=0)
+                document.getElementById("quantity" + sanphamId).value = 1;
+            document.getElementById("updateCartForm" + sanphamId).submit();
         }
     </script>
-    <form id="updateCartForm" name="updateCartForm" th:action="@{/cart/update}" method="post" onsubmit="DoSubmit()">
-        <table class="table" th:unless="${cartItems.isEmpty()}" style="margin-bottom: 80px;">
-            <thead class="table-light">
-            <tr>
-                <th>Ảnh</th>
-                <th>Tên sản phẩm</th>
-                <th>Số lượng</th>
-                <th>Giá</th>
-                <th>Tổng tiền</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="item : ${cartItems}">
-                <td>
-                    <img th:src="${item.sanpham.images}">
-                </td>
-                <td th:text="${item.sanpham.Ten}"></td>
-                <td class="pro-quantity">
+    <table class="table" th:unless="${cartItems.isEmpty()}" style="margin-bottom: 80px;">
+        <thead class="table-light">
+        <tr>
+            <th>Ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Giá</th>
+            <th>Tổng tiền</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${cartItems}">
+            <td>
+                <img th:src="${item.sanpham.images}" style="width: 250px; height: 150px;">
+            </td>
+            <td th:text="${item.sanpham.Ten}"></td>
+            <td class="pro-quantity">
+
+                <form th:id="${'updateCartForm'+item.getSanpham().getId()}" th:action="@{/cart/update}" method="post" onsubmit="DoSubmit();">
+
                     <!-- Hidden input for sanphamId -->
                     <input type="hidden" name="sanphamId" th:value="${item.sanpham.id}">
                     <!-- Input for quantity -->
-                    <input id="quantity" style="text-align: center" name="quantity" th:value="${item.getQuantity()}" type="number" value="1" onchange="DoSubmit()">
-                </td>
-                <td class="pro-price">
-                    <span th:text="${#numbers.formatDecimal(item.sanpham.Gia, 0, 'COMMA', 0, 'POINT')}"></span>
-                </td>
-                <td class="pro-subtotal">
-                    <span th:text="${#numbers.formatDecimal(item.getAmount(), 0, 'COMMA', 0, 'POINT')}"></span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </form>
+                    <input th:id="${item.getSanpham().getId()}" style="text-align: center" name="quantity" th:value="${item.getQuantity()}" type="number" value="1" onchange="DoSubmit(this.id)">
+                </form>
+
+            </td>
+            <td class="pro-price">
+                <span th:text="${#numbers.formatDecimal(item.sanpham.Gia, 0, 'COMMA', 0, 'POINT')}"></span>
+            </td>
+            <td class="pro-subtotal">
+                <span th:text="${#numbers.formatDecimal(item.getAmount(), 0, 'COMMA', 0, 'POINT')}"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
     <a th:href="@{/order/checkout}" class="btn btn-success" th:if="${!cartItems.isEmpty()}" style="font-size: 12px;margin: 12px 6px;border: 1px solid #333;">Checkout</a>
 </section>
 
